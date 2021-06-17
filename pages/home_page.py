@@ -1,5 +1,7 @@
 from pages.base_page import BasePage
 from utils.locators import HomePageLocators
+import time
+from selenium.webdriver.common.by import By
 
 class HomePage(BasePage):
 
@@ -7,14 +9,16 @@ class HomePage(BasePage):
         super().__init__(driver)
         self.locator = HomePageLocators
 
-    def click_on_person(self):
-        person_1 = self.driver.find_element(*self.locator.PERSON_1)
-        person_1.click()
-    
     def send_message(self, message):
-        self.driver.execute_script(f"document.evaluate('/html/body/div[1]/div/div[1]/div/div[2]/div/div/div[1]/div[1]/div[2]/div/div/div/div/div/div[1]/div[2]/div/div/div/div[2]/div/form/div/div[3]/div[2]/div[1]/div/div/div/div/div/div/div/div/div/span/span', document, null).singleNodeValue.innerHTML = {message};") 
-        # message_txtbox = self.driver.find_element(*self.locator.MESSAGE_TXTBOX)
-        # message_txtbox.click()
-        # message_txtbox.send_keys(message)
-        send_button = self.driver.find_element(*self.locator.SEND_BUTTON)
-        send_button.click()
+        persons = (self.driver.find_element(*self.locator.PERSONS)).find_elements(*self.locator.PERSON)
+        for person in persons:
+            time.sleep(3)
+            person.click()
+            time.sleep(5)
+            msg = self.driver.find_element(*self.locator.MESSAGE_TXTBOX)
+            time.sleep(5)
+            msg.send_keys(message)
+            time.sleep(3)
+            print("message sent")
+            send_button = self.driver.find_element(*self.locator.SEND_BUTTON)
+            send_button.click()
